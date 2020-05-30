@@ -80,7 +80,18 @@ func GetCategory(ctx *gin.Context) {
 // 分类列表
 func GetCategories(ctx *gin.Context) {
 	var categories []model.Category
-	err := repository.Show(&categories)
+	name := ctx.Request.FormValue("name")
+	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))        // 页数
+	per_num, _ := strconv.Atoi(ctx.DefaultQuery("per_num", "2")) // 每页个数
+
+	where := make(map[string]interface{})
+	if name != "" {
+		where["name"] = name
+	}
+	where["offset"] = (page - 1) * per_num
+	where["limit"] = per_num
+
+	err := repository.Show(&categories, where)
 	if err != nil {
 		response.Error(ctx, nil, "获取失败")
 		return
