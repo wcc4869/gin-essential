@@ -81,8 +81,11 @@ func GetCategory(ctx *gin.Context) {
 func GetCategories(ctx *gin.Context) {
 	var categories []model.Category
 	name := ctx.Request.FormValue("name")
-	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))        // 页数
-	per_num, _ := strconv.Atoi(ctx.DefaultQuery("per_num", "2")) // 每页个数
+	page, _ := strconv.Atoi(ctx.DefaultQuery("page", "1"))       // 页数
+	per_num, _ := strconv.Atoi(ctx.DefaultQuery("per_num", "3")) // 每页个数
+
+	order := ctx.DefaultQuery("order", "id")
+	orderType := ctx.DefaultQuery("order_type", "DESC")
 
 	where := make(map[string]interface{})
 	if name != "" {
@@ -90,6 +93,8 @@ func GetCategories(ctx *gin.Context) {
 	}
 	where["offset"] = (page - 1) * per_num
 	where["limit"] = per_num
+	where["order"] = order
+	where["order_type"] = orderType
 
 	err := repository.Show(&categories, where)
 	if err != nil {

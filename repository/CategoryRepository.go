@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"fmt"
 	"github.com/wcc4869/ginessential/common"
 	"github.com/wcc4869/ginessential/model"
 )
@@ -46,15 +45,19 @@ func DeleteCategory(category *model.Category, id int) bool {
 func Show(categories *[]model.Category, option map[string]interface{}) (err error) {
 	//err = common.DB.Find(categories).Error
 	con := common.DB.Debug().Offset(option["offset"]).Limit(option["limit"])
-	_, ok := option["name"]
-	ln := "%" + option["name"].(string) + "%" // interface to string
+	name, ok := option["name"].(string)
+	ln := "%" + name + "%" // interface to string
 	if ok {
 		con = con.Where("name LIKE ?", ln)
 	}
-	fmt.Println(option["name"])
-	err = con.Find(&categories).Error
-	if err != nil {
-		return err
-	}
+	order := option["order"].(string)
+	orderType := option["order_type"].(string)
+	con = con.Order(order + " " + orderType)
+	//fmt.Println(name)
+	con.Find(&categories)
+	//err = con.Find(&categories).Error
+	//if err != nil {
+	//	return err
+	//}
 	return nil
 }
