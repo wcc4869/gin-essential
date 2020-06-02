@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/360EntSecGroup-Skylar/excelize/v2"
 	"github.com/wcc4869/ginessential/common"
 	"github.com/wcc4869/ginessential/model"
 )
@@ -60,4 +61,32 @@ func Show(categories *[]model.Category, option map[string]interface{}) (err erro
 	//	return err
 	//}
 	return nil
+}
+
+func Ecxel() {
+
+	f := excelize.NewFile()
+	// 创建一个工作表
+	index := f.NewSheet("Sheet1")
+	categories := map[string]string{"A1": "id", "B1": "name", "C1": "age"}
+	for k, v := range categories {
+		f.SetCellValue("Sheet1", k, v)
+	}
+
+	values := map[string]string{"A2": "1", "B2": "WCC", "C2": "12", "A3": "2", "B3": "LKK", "C3": "24"}
+
+	for k, v := range values {
+		f.SetCellValue("Sheet1", k, v)
+	}
+
+	// 设置单元格的值
+	//f.SetCellValue("Sheet1", "A2", "Hello world.")
+	//f.SetCellValue("Sheet1", "B2", 100)
+	// 设置工作簿的默认工作表
+	f.SetActiveSheet(index)
+	// 根据指定路径保存文件
+	if err := f.SaveAs("t.xlsx"); err != nil {
+		println(err.Error())
+	}
+
 }

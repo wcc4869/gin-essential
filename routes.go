@@ -19,6 +19,7 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 	categoryRoutes.DELETE("/delete", controller.DeleteCategory)
 	categoryRoutes.GET("/get", controller.GetCategory)
 	categoryRoutes.GET("/list", controller.GetCategories)
+	categoryRoutes.GET("/excel", controller.ExportExcel)
 
 	return r
 }

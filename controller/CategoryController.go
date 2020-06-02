@@ -104,3 +104,7 @@ func GetCategories(ctx *gin.Context) {
 	response.Success(ctx, gin.H{"data": categories}, "获取成功")
 
 }
+
+func ExportExcel(ctx *gin.Context) {
+	repository.Ecxel()
+}
